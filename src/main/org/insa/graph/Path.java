@@ -224,8 +224,7 @@ public class Path {
      * @deprecated Need to be implemented.
      */
     public double getTravelTime(double speed) {
-        // TODO:
-        return 0;
+    	return getLength() * 3600.0 / (speed * 1000.0);
     }
 
     /**
@@ -237,8 +236,7 @@ public class Path {
      * @deprecated Need to be implemented.
      */
     public double getMinimumTravelTime() {
-        // TODO:
-        return 0;
+    	return getTravelTime(getRoadInformation().getMaximumSpeed());
     }
 
 }
