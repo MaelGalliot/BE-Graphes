@@ -209,7 +209,7 @@ public class Path {
         	else {
         		//Si l'origine du chemin est la même que l'origine du premier arc
         		if (this.getOrigin().compareTo(arcs.get(0).getOrigin()) == 0) {
-        			//On considère momentanéement le chemin comme valide
+        			//On considère momentanément le chemin comme valide
         			valid = true;
         			//Mais si un seul de ses arcs a une destination qui diffère de celle du suivant,
         			//Le chemin devient non valide
@@ -233,7 +233,9 @@ public class Path {
      * IMPLEMENTED
      */
     public float getLength() {
+    	//La longueur totale du chemin
         float pathLength = 0;
+        //Pour chaque arc du chemin, on récupère sa longueur et on fait la somme
         for (Arc arc : arcs) {
         	pathLength += arc.getLength();
         }
@@ -267,8 +269,9 @@ public class Path {
      * IMPLEMENTED.
      */
     public double getMinimumTravelTime() {
-    	//return getTravelTime(getRoadInformation().getMaximumSpeed());
+    	//La durée minimale
     	double travelTime = 0;
+    	//Pour chaque arc, on cherche sa durée minimale et on fait la somme totale
     	for (Arc arc : arcs) {
     		travelTime += arc.getMinimumTravelTime();
     	}
