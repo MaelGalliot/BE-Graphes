@@ -107,7 +107,6 @@ public class Path {
         this.graph = graph;
         this.origin = null;
         this.arcs = new ArrayList<>();
-        //yolo
     }
 
     /**
@@ -194,11 +193,36 @@ public class Path {
      * 
      * @return true if the path is valid, false otherwise.
      * 
-     * @deprecated Need to be implemented.
+     * IMPLEMENTED.
      */
     public boolean isValid() {
-        // TODO:
-        return false;
+        boolean valid = false;
+        //Si le chemin est vide, il est valide
+        if (this.isEmpty()) {
+        	valid = true;
+        }
+        else {
+        	//Sinon s'il ne contient qu'un seul noeud, il est aussi valide
+        	if (this.size() == 1) {
+        		valid = true;
+        	}
+        	else {
+        		//Si l'origine du chemin est la même que l'origine du premier arc
+        		if (this.getOrigin().compareTo(arcs.get(0).getOrigin()) == 0) {
+        			//On considère momentanéement le chemin comme valide
+        			valid = true;
+        			//Mais si un seul de ses arcs a une destination qui diffère de celle du suivant,
+        			//Le chemin devient non valide
+        			for (int i = 0 ; i < arcs.size() - 1 ; i++) {
+        				if (arcs.get(i).getDestination().compareTo(arcs.get(i+1).getOrigin()) != 0) {
+        					valid = false;
+        					break;
+        				}
+        			}
+        		}
+        	}
+        }
+        return valid;
     }
 
     /**
@@ -206,11 +230,14 @@ public class Path {
      * 
      * @return Total length of the path (in meters).
      * 
-     * @deprecated Need to be implemented.
+     * IMPLEMENTED
      */
     public float getLength() {
-        // TODO:
-        return 0;
+        float pathLength = 0;
+        for (Arc arc : arcs) {
+        	pathLength += arc.getLength();
+        }
+        return pathLength;
     }
 
     /**
@@ -221,10 +248,14 @@ public class Path {
      * @return Time (in seconds) required to travel this path at the given speed (in
      *         kilometers-per-hour).
      * 
-     * @deprecated Need to be implemented.
+     * IMPLEMENTED.
      */
     public double getTravelTime(double speed) {
-    	return getLength() * 3600.0 / (speed * 1000.0);
+    	//On convertit la vitesse donnée en en m/s 
+    	double speedInMetersSeconds = (1000 * speed)/3600; 
+    	//On divise la longueur du chemin par la vitesse en m.s
+    	double travelTime = this.getLength() / speedInMetersSeconds;
+    	return travelTime;
     }
 
     /**
@@ -233,10 +264,15 @@ public class Path {
      * 
      * @return Minimum travel time to travel this path (in seconds).
      * 
-     * @deprecated Need to be implemented.
+     * IMPLEMENTED.
      */
     public double getMinimumTravelTime() {
-    	return getTravelTime(getRoadInformation().getMaximumSpeed());
+    	//return getTravelTime(getRoadInformation().getMaximumSpeed());
+    	double travelTime = 0;
+    	for (Arc arc : arcs) {
+    		travelTime += arc.getMinimumTravelTime();
+    	}
+    	return travelTime;
     }
 
 }

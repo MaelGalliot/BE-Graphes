@@ -1,0 +1,8 @@
+GIT
+
+Penser à faire le PULL à chaque fois que l'on travaille sur le projet
+
+Pour envoyer modifications sur la branche principale :
+git add fic.java
+git commit -m "commentaire"
+git push
