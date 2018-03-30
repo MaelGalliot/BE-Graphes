@@ -36,8 +36,7 @@ public class Path {
         //Pour savoir si notre fastestArc contient bien un arc valide du noeud courant menant au suivant
         boolean initialized = false;
         if (nodes.size() == 1) {
-        	fastestArc = new ArcForward(nodes.get(0), nodes.get(0), 0, null, null);
-        	arcs.add(fastestArc);
+        	return new Path(graph, nodes.get(0));
         }
         else {
         	for (int i = 0 ; i < nodes.size() - 1 ; i++) {
