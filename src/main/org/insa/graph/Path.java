@@ -254,7 +254,7 @@ public class Path {
      */
     public double getTravelTime(double speed) {
     	//On convertit la vitesse donnée en en m/s 
-    	double speedInMetersSeconds = (1000 * speed)/3600; 
+    	double speedInMetersSeconds = speed/3,6; 
     	//On divise la longueur du chemin par la vitesse en m.s
     	double travelTime = this.getLength() / speedInMetersSeconds;
     	return travelTime;
