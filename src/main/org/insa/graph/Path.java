@@ -95,41 +95,50 @@ public class Path {
 
     public static Path createShortestPathFromNodes(Graph graph, List<Node> nodes) throws IllegalArgumentException { /*Si il n'y a pas de noeud exception */
     	List<Arc> arcs = new ArrayList<Arc>();
-        Arc arcShortest = null;
-        boolean initarc=false;
-        if(nodes.size()==1)/*Si le noeud n'a qu'un chemin*/
-        {
-        	return new Path(graph,nodes.get(0));
+        //Pour chaque noeud de la liste, on va stocker l'arc le plus rapide menant au suivant
+        Arc fastestArc = null;
+        //Pour savoir si notre fastestArc contient bien un arc valide du noeud courant menant au suivant
+        boolean initialized = false;
+        if (nodes.size() == 1) {
+        	return new Path(graph, nodes.get(0));
         }
-        else /*Si il y a plusieurs chemins*/
-        {
-        	for(int i = 0; i<nodes.size()-1;++i)/* Pour tous les noeuds de la listes */
-            {
-            	if(nodes.get(i).hasSuccessors()) /*Si le noeud i des successeurs*/
-            	{        			
-            		for(Arc arc : nodes.get(i)) /* Pour les arcs du noeud i */
-            		{
-            			if(arc.getDestination().compareTo(nodes.get(i+1))==0)/*On regarde les arcs du noeud i qui vont au noeud n+1 */
-    	               	{
-    	            		if(!initarc) /*Si c'est la première itération*/
-    	            		{
-    	            			arcShortest = arc;//On prend un arc par défaut
-    	            			initarc = true;
-    	            		}
-    	            		else
-                       			if(arc.getLength() < arcShortest.getLength())/*Pour tous les arcs qui vont au noeud n+1*/
-                       				arcShortest = arc;
-    	            	}
-            		}
-            		if(!initarc)/*Si initarc n'a pas était mis à true aucun arc ne va au noeud i+1*/
-        				throw new IllegalArgumentException(); //Aucun arc ne mene au noeud i+1
-            		arcs.add(arcShortest); /*On ajoute l'arc dans la liste d'arc à sauvegarder */
+        else {
+        	for (int i = 0 ; i < nodes.size() - 1 ; i++) {
+            	//On vérifie que le noeud courant a bien des successeurs
+            	if (nodes.get(i).hasSuccessors()) {
+            		//Pour chaque noeud, on parcourt les arcs qui en partent
+        			for (Arc arc : nodes.get(i)) {
+        				if (arc.getDestination().compareTo(nodes.get(i+1)) == 0) {
+        					//On stocke dans fastestArc le premier arc valide que l'on trouve si fastestArc n'est pas
+        					//encore initialisé
+        					if(!initialized) {
+        						fastestArc = arc;
+        						initialized= true;
+        					}
+        					//Si fastestArc est déjà valide, on le compare à notre arc courant
+        					else {
+        						if (arc.getLength() < fastestArc.getLength()) {
+        							//On met à jour l'arc le plus rapide
+        							fastestArc = arc;
+        						}
+        					}
+        				}
+        			}
+        			//Si on a trouvé aucun arc qui mène au noeud suivant
+        			if (!initialized) {
+        				throw new IllegalArgumentException();
+        			}
+        			//Sinon on remet fastestArc comme non initialisé puis on passe au noeud suivant après avoir mis à jour 
+        			//notre path
+        			initialized = false;
+        			arcs.add(fastestArc);
             	}
-            	else // Auncun successeur
+            	//Si le noeud courant ne possède aucun successeur
+            	else {
             		throw new IllegalArgumentException();
+            	}
             }
         }
-        
         return new Path(graph, arcs);
     }
 
