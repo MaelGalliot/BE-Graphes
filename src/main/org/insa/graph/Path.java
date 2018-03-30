@@ -100,14 +100,13 @@ public class Path {
         boolean initarc=false;
         if(nodes.size()==1)/*Si le noeud n'a qu'un chemin*/
         {
-        	arcShortest = new ArcForward(nodes.get(0), nodes.get(0), 0, null, null);
-        	arcs.add(arcShortest);
+        	return new Path(graph,nodes.get(0));
         }
         else /*Si il y a plusieurs chemins*/
         {
         	for(int i = 0; i<nodes.size()-1;++i)/* Pour tous les noeuds de la listes */
             {
-            	if(nodes.get(i).hasSuccessors()) /*Si le noeud i � des successeurs*/
+            	if(nodes.get(i).hasSuccessors()) /*Si le noeud i des successeurs*/
             	{        			
             		for(Arc arc : nodes.get(i)) /* Pour les arcs du noeud i */
             		{
@@ -123,9 +122,9 @@ public class Path {
                        				arcShortest = arc;
     	            	}
             		}
-            		if(!initarc)/*Si initarc n'a pas était mis � true aucun arc ne va au noeud i+1*/
+            		if(!initarc)/*Si initarc n'a pas était mis à true aucun arc ne va au noeud i+1*/
         				throw new IllegalArgumentException(); //Aucun arc ne mene au noeud i+1
-            		arcs.add(arcShortest); /*On ajoute l'arc dans la liste d'arc � sauvegarder */
+            		arcs.add(arcShortest); /*On ajoute l'arc dans la liste d'arc à sauvegarder */
             	}
             	else // Auncun successeur
             		throw new IllegalArgumentException();
