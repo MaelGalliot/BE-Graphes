@@ -113,9 +113,9 @@ public class Path {
             		{
             			if(arc.getDestination().compareTo(nodes.get(i+1))==0)/*On regarde les arcs du noeud i qui vont au noeud n+1 */
     	               	{
-    	            		if(!initarc) /*Si c'est la premi�re it�ration*/
+    	            		if(!initarc) /*Si c'est la première itération*/
     	            		{
-    	            			arcShortest = arc;//On prend un arc par d�faut
+    	            			arcShortest = arc;//On prend un arc par défaut
     	            			initarc = true;
     	            		}
     	            		else
@@ -123,9 +123,8 @@ public class Path {
                        				arcShortest = arc;
     	            	}
             		}
-            		if(!initarc)/*Si initarc n'a pas �tait mis � true aucun arc ne va au noeud i+1*/
+            		if(!initarc)/*Si initarc n'a pas était mis � true aucun arc ne va au noeud i+1*/
         				throw new IllegalArgumentException(); //Aucun arc ne mene au noeud i+1
-            		initarc = false;//On remet l'init � false pour le prochain noeuf
             		arcs.add(arcShortest); /*On ajoute l'arc dans la liste d'arc � sauvegarder */
             	}
             	else // Auncun successeur
