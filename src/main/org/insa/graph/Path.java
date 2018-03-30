@@ -1,5 +1,6 @@
 package org.insa.graph;
 
+import java.nio.file.NotDirectoryException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -30,7 +31,7 @@ public class Path {
     public static Path createFastestPathFromNodes(Graph graph, List<Node> nodes)
             throws IllegalArgumentException {
         List<Arc> arcs = new ArrayList<Arc>();
-        // TODO:
+        
         return new Path(graph, arcs);
     }
 
@@ -49,9 +50,15 @@ public class Path {
      * @deprecated Need to be implemented.
      */
     public static Path createShortestPathFromNodes(Graph graph, List<Node> nodes)
-            throws IllegalArgumentException {
+            throws IllegalArgumentException { /*Si il n'y a pas de noeud exception */
         List<Arc> arcs = new ArrayList<Arc>();
-        // TODO:
+        for(int i = 0; i<nodes.size();++i)/* On regarde la liste de noeud et on cherche le noeud qui est le plus court*/
+        {
+        	if(node.get(i).hasSuccessors())
+        	{
+        		node.get(i).getSuccessors();
+        	}
+        }
         return new Path(graph, arcs);
     }
 
