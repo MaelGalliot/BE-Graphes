@@ -52,11 +52,17 @@ public class Path {
     public static Path createShortestPathFromNodes(Graph graph, List<Node> nodes)
             throws IllegalArgumentException { /*Si il n'y a pas de noeud exception */
         List<Arc> arcs = new ArrayList<Arc>();
-        for(int i = 0; i<nodes.size();++i)/* On regarde la liste de noeud et on cherche le noeud qui est le plus court*/
+        for(int i = 0; i<nodes.size();++i)/* Pour tous les noeuds de la listes */
         {
-        	if(node.get(i).hasSuccessors())
+        	if(node.get(i).hasSuccessors()) /*Si le noeud à des successeurs*/
         	{
-        		node.get(i).getSuccessors();
+        		for(Arc arc : nodes.get(i)) /* Pour les arcs de ce noeud */
+        		{
+               		if(arc.getDestination().compareTo(nodes.get(i+1))==0)/*On regarde les arcs qui vont au point suivant */
+               		{
+               			
+               		}
+        		}
         	}
         }
         return new Path(graph, arcs);
