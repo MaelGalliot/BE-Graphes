@@ -6,6 +6,8 @@ bin
 target
 doc
 *.jar
+maps/
+paths/
 
 # Editor specific files and folders
 *~
