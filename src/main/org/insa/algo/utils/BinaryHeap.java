@@ -143,31 +143,27 @@ public class BinaryHeap<E extends Comparable<E>> implements PriorityQueue<E> {
     }
     /**************************REMOVE*****************************/
     @Override
-    public void remove(E x) throws ElementNotFoundException, EmptyPriorityQueueException {
+    public void remove(E x) throws ElementNotFoundException {
     	E tampon, lastElement;
+    	/***********************
+    	//REMPLACER INDEXOF !!!!
+    	************************/
     	int index = this.array.indexOf(x);//On récupère l'index de l'élément recherché
-		if(!this.isEmpty()){//Si cet élement n'est pas vide ET si l'index existe
-	    	lastElement = this.array.get(this.currentSize -1);
-			if (index != -1) {
-				tampon = this.array.get(index);//On echange notre element avec le dernier
-				this.arraySet(index, lastElement);
-				this.arraySet(this.currentSize -1, tampon);
-				this.arraySet(this.currentSize -1, null);//On l'enleve
-				this.currentSize--;
-				if (index != currentSize)
-					this.percolateDown(index);
-				if (index > 0)
-					this.percolateUp(index);
-			}
-			else {
-				//Si on n'a pas trouvé l'élément recherché
-				throw new ElementNotFoundException(x);
-			}
-    	}
-    	else{
-    		//Si le tas est vide
-    		throw new EmptyPriorityQueueException();
-    	}
+		if (index != -1 && index < this.currentSize) {
+			lastElement = this.array.get(this.currentSize -1);
+			tampon = this.array.get(index);//On echange notre element avec le dernier
+			this.arraySet(index, lastElement);
+			this.arraySet(this.currentSize -1, tampon);
+			this.currentSize--;
+			if (index != currentSize)
+				this.percolateDown(index);
+			if (index > 0)
+				this.percolateUp(index);
+		}
+		else {
+			//Si on n'a pas trouvé l'élément recherché
+			throw new ElementNotFoundException(x);
+		}
     }
 
     @Override
