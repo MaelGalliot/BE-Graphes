@@ -2,7 +2,7 @@ package org.insa.algo.shortestpath;
 
 import org.insa.graph.Node;
 
-public class Label {
+public class Label implements Comparable<Label> {
 	protected Node noeud;
 	protected Node father;
 	protected double cout;
@@ -37,5 +37,13 @@ public class Label {
 	
 	public void setFather(Node father) {
 		this.father = father;
+	}
+	
+	public int compareTo(Label other) {
+        return Double.compare(getCout(), other.getCout());
+    }
+	
+	public Node getNoeud() {
+		return this.noeud;
 	}
 }
