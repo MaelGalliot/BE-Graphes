@@ -67,7 +67,7 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
                 	//On le flag comme marqué
                 	labels[noeudCourant.getId()].setMarque(true);
                 	//Pour visualiser le déroulement de l'algo sur la carte
-                	notifyNodeReached(noeudCourant);
+                	//notifyNodeReached(noeudCourant);
                 	
                 	//On parcourt tous les successeurs
                 	for (Arc successeur : noeudCourant) {
@@ -119,7 +119,7 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
         }
         else {
         	if (nullPath) {
-        		solution = new ShortestPathSolution(data, AbstractSolution.Status.valueOf("OPTIMAL"), new Path(graph));
+        		solution = new ShortestPathSolution(data, AbstractSolution.Status.valueOf("OPTIMAL"), null);
         	}
         	else {
             	solution = new ShortestPathSolution(data, AbstractSolution.Status.valueOf("INFEASIBLE"));

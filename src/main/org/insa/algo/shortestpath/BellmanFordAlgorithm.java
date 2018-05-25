@@ -55,7 +55,7 @@ public class BellmanFordAlgorithm extends ShortestPathAlgorithm {
 					double newDistance = distances[node.getId()] + w;
 
 					if (Double.isInfinite(oldDistance) && Double.isFinite(newDistance)) {
-						notifyNodeReached(arc.getDestination());
+						//notifyNodeReached(arc.getDestination());
 					}
 
 					// Check if new distances would be better, if so update...
