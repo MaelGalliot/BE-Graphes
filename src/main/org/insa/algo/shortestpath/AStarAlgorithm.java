@@ -79,9 +79,9 @@ public class AStarAlgorithm extends DijkstraAlgorithm {
                 		//Si le successeur est autorisé dans le trajet
                 		if (data.isAllowed(successeur)) {
                 			//Si on trouve un cout inférieur au coût actuel du successeur
-                			if(labels[noeudCourant.getId()].getTotalCost()+successeur.getLength() < labels[successeur.getDestination().getId()].getTotalCost()) {
+                			if(labels[noeudCourant.getId()].getCout()+successeur.getLength() < labels[successeur.getDestination().getId()].getCout()) {
                 				//On met à jour le coût du successeur à l'origine 
-                				labels[successeur.getDestination().getId()].setCout(labels[noeudCourant.getId()].getTotalCost()+successeur.getLength());
+                				labels[successeur.getDestination().getId()].setCout(labels[noeudCourant.getId()].getCout()+successeur.getLength());
                 				//et à la destination
                 				labels[successeur.getDestination().getId()].setCoutDest(
                 						labels[successeur.getDestination().getId()].getNoeud().getPoint().distanceTo(
