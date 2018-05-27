@@ -2,6 +2,7 @@ package org.insa.algo.shortestpath;
 
 import java.util.ArrayList;
 
+
 import org.insa.algo.AbstractSolution;
 import org.insa.algo.utils.BinaryHeap;
 import org.insa.graph.Arc;
