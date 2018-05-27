@@ -7,6 +7,8 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import static org.junit.Assert.assertEquals;
+
+import org.insa.algo.shortestpath.AStarAlgorithm;
 import org.insa.algo.shortestpath.BellmanFordAlgorithm;
 import org.insa.algo.shortestpath.DijkstraAlgorithm;
 import org.insa.algo.shortestpath.ShortestPathData;
@@ -37,10 +39,10 @@ public class DijkstraAlgorithmTest {
     private static Path[][] pathsD = new Path[6][6];
     private static Path[][] pathsB = new Path[6][6];
     //Pour créer les algos à chaque tour de boucle
-    private static DijkstraAlgorithm algoD;
+    private static AStarAlgorithm algoD;
     private static BellmanFordAlgorithm algoB;
     
-    @BeforeClass
+    
     public static void init() {
     	//Pour pouvoir récupérer les différents filtres à appliquer aux chemins
     	java.util.List<ArcInspector> filters = new ArrayList<ArcInspector>();
@@ -73,9 +75,9 @@ public class DijkstraAlgorithmTest {
     	//Construction des résultats 
     	for(ligne = 0 ; ligne < 6 ; ligne++) {
     		for(colonne = 0 ; colonne < 6 ; colonne++) {
-    			algoD = new DijkstraAlgorithm(new ShortestPathData(graph, nodes[ligne], nodes[colonne], filters.get(0)));
+    			algoD = new AStarAlgorithm(new ShortestPathData(graph, nodes[ligne], nodes[colonne], filters.get(0)));
     			algoB = new BellmanFordAlgorithm(new ShortestPathData(graph, nodes[ligne], nodes[colonne], filters.get(0)));
-    			//System.out.println("["+ ligne + ";" + colonne + "]");
+    			System.out.println("["+ ligne + ";" + colonne + "]");
     			pathsD[ligne][colonne] = algoD.doRun().getPath();
         		pathsB[ligne][colonne] = algoB.doRun().getPath();
     		}
