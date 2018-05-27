@@ -19,6 +19,10 @@ public class Label implements Comparable<Label> {
 		return this.cout;
 	}
 	
+	public double getTotalCost() {
+		return this.getCout();
+	}
+	
 	public void setCout(double cout) {
 		this.cout = cout;
 	}
@@ -40,7 +44,7 @@ public class Label implements Comparable<Label> {
 	}
 	
 	public int compareTo(Label other) {
-        return Double.compare(getCout(), other.getCout());
+        return Double.compare(getTotalCost(), other.getTotalCost());
     }
 	
 	public Node getNoeud() {

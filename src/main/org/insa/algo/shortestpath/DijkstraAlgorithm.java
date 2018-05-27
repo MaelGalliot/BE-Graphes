@@ -58,25 +58,24 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
         	//Tant que le sommet de destination n'est pas marqué, on itère Dijkstra
             while(!labels[data.getDestination().getId()].estMarque())
             {
-            	//On récupère le sommet de coût minimal par rapport à l'origine
+            	//On enlève le sommet de coût minimal par rapport à l'origine
             	if(!tas.isEmpty()) {
-                	labelCourant = tas.findMin();
-                	//On l'enlève du tas
-                	tas.remove(labelCourant);
+                	labelCourant = tas.deleteMin();
                 	noeudCourant = labelCourant.getNoeud();
                 	//On le flag comme marqué
                 	labels[noeudCourant.getId()].setMarque(true);
+                	
                 	//Pour visualiser le déroulement de l'algo sur la carte
-                	//notifyNodeReached(noeudCourant);
+                	notifyNodeReached(noeudCourant);
                 	
                 	//On parcourt tous les successeurs
                 	for (Arc successeur : noeudCourant) {
                 		//Si le successeur est autorisé dans le trajet
                 		if (data.isAllowed(successeur)) {
                 			//Si on trouve un cout inférieur au coût actuel du successeur
-                			if(labels[noeudCourant.getId()].getCout()+successeur.getLength() < labels[successeur.getDestination().getId()].getCout()) {
+                			if(labels[noeudCourant.getId()].getTotalCost()+successeur.getLength() < labels[successeur.getDestination().getId()].getTotalCost()) {
                 				//On met à jour le coût du successeur
-                				labels[successeur.getDestination().getId()].setCout(labels[noeudCourant.getId()].getCout()+successeur.getLength());
+                				labels[successeur.getDestination().getId()].setCout(labels[noeudCourant.getId()].getTotalCost()+successeur.getLength());
                 				//On met à jour le père du successeur
                 				labels[successeur.getDestination().getId()].setFather(noeudCourant);
                 				//On insère dans le tas le label du successeur s'il n'y est pas déjà
