@@ -122,7 +122,7 @@ public class DijkstraAlgorithmTest {
     		//On génère un couple aléatoire
     		Node origine = graph2.get((int)(graph2.size()*Math.random()));
     		Node destination = graph2.get((int)(graph2.size()*Math.random()));
-    		for (int j = 0 ; j < 3 ; j++) {
+    		for (int j = 0 ; j < 4 ; j++) {
         		//Permet de visualiser l'avancement des tests
     			switch(j) {
     			case 0 : System.out.println("Défaut (longueur) ["+ origine.getId() + ";" + destination.getId() + "]"); break;

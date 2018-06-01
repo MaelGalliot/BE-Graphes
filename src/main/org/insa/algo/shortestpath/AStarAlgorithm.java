@@ -3,7 +3,7 @@ package org.insa.algo.shortestpath;
 import java.time.Duration;
 import java.util.ArrayList;
 
-
+import org.insa.algo.AbstractInputData.Mode;
 import org.insa.algo.AbstractSolution;
 import org.insa.algo.utils.BinaryHeap;
 import org.insa.graph.Arc;
@@ -19,9 +19,8 @@ public class AStarAlgorithm extends DijkstraAlgorithm {
 
     @Override
     public ShortestPathSolution doRun() {
-    	//Pour connaître le temps d'éxécution
-    	long startTime = System.nanoTime();
-    	long duration;
+    	//Pour calculer la distance estimée à la destination
+    	double modificateur = 1;
     	//Pour compter le nombre d'itérations de A*
     	int i = 0;
     	//S'il existe une solution
@@ -64,6 +63,12 @@ public class AStarAlgorithm extends DijkstraAlgorithm {
         		labels[data.getOrigin().getId()].getNoeud().getPoint().distanceTo(
         				labels[data.getDestination().getId()].getNoeud().getPoint()));
         tas.insert(labels[data.getOrigin().getId()]);
+        
+        //En fonction du mode choisi (Temps ou Distance), le calcul du coût estimé à la destination sera différent
+		if (data.getMode().equals(Mode.TIME)) {
+			modificateur = (double)1/((double)data.getGraph().getGraphInformation().getMaximumSpeed()) * ((double)3600/(double)1000);
+		}
+        
         //Si l'origine et la destination diffèrent
         if(data.getOrigin().getId() != data.getDestination().getId()) {
         	//Tant que le sommet de destination n'est pas marqué, on itère Dijkstra
@@ -89,7 +94,7 @@ public class AStarAlgorithm extends DijkstraAlgorithm {
                 				//On met à jour le coût du successeur à l'origine 
                 				labels[successeur.getDestination().getId()].setCout(labels[noeudCourant.getId()].getCout()+data.getCost(successeur));
                 				//et à la destination
-                				labels[successeur.getDestination().getId()].setCoutDest(
+                				labels[successeur.getDestination().getId()].setCoutDest(modificateur *
                 						labels[successeur.getDestination().getId()].getNoeud().getPoint().distanceTo(
                 		        				labels[data.getDestination().getId()].getNoeud().getPoint()));
                 				//On met à jour le père du successeur
@@ -143,8 +148,6 @@ public class AStarAlgorithm extends DijkstraAlgorithm {
             }
         }
         
-        duration = startTime - System.nanoTime();
-        //solution.setSolvingTime(Duration.ofNanos(arg0));
         //BILAN DE L'EXECUTION
         /*
         System.out.println("Arcs : " + (noeuds.size()-1));
