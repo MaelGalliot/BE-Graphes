@@ -7,7 +7,7 @@ public class LabelStar extends Label{
 	
 	public LabelStar (Node noeud) {
 		super(noeud);
-		this.coutDest = Double.POSITIVE_INFINITY;;
+		this.coutDest = Double.POSITIVE_INFINITY;
 	}
 	
 	public void setCoutDest (double coutDest) {

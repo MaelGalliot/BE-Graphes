@@ -18,8 +18,8 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
     public ShortestPathSolution doRun() {
     	//Pour compter le nombre d'itérations de Dijkstra
     	int i = 0;
-    	//Si le chemin demandé existe
-    	boolean pathExists = true;
+    	//Si le chemin demandé est faisable
+    	boolean feasible = true;
     	//Si l'origine est égale à la destination
     	boolean nullPath = false;
     	//Pour construire la solution, on va créer plusCourtChemin à partir de noeuds, puis solution à partir de
@@ -73,9 +73,9 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
                 		//Si le successeur est autorisé dans le trajet
                 		if (data.isAllowed(successeur)) {
                 			//Si on trouve un cout inférieur au coût actuel du successeur
-                			if(labels[noeudCourant.getId()].getTotalCost()+successeur.getLength() < labels[successeur.getDestination().getId()].getTotalCost()) {
+                			if(labels[noeudCourant.getId()].getTotalCost()+data.getCost(successeur) < labels[successeur.getDestination().getId()].getTotalCost()) {
                 				//On met à jour le coût du successeur
-                				labels[successeur.getDestination().getId()].setCout(labels[noeudCourant.getId()].getTotalCost()+successeur.getLength());
+                				labels[successeur.getDestination().getId()].setCout(labels[noeudCourant.getId()].getTotalCost()+data.getCost(successeur));
                 				//On met à jour le père du successeur
                 				labels[successeur.getDestination().getId()].setFather(noeudCourant);
                 				//On insère dans le tas le label du successeur s'il n'y est pas déjà
@@ -84,20 +84,23 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
                 			}
                 		}
                 	}
+                	//On incrémente le nombre d'itérations
                 	i++;
             	}
             	else {
-            		pathExists = false;
+            		//Le tas est vide alors que la destination n'a pas été atteinte => Il n'existe pas de solution
+            		feasible = false;
             		break;
             	}
             }
         }
         else {
+        	//L'origine et la destination sont le même noeud => Il existe une solution : le chemin null
         	nullPath = true;
         }
-       
-        //S'il existe une solution
-        if(pathExists && !nullPath) {
+        
+        //S'il existe une solution non nulle
+        if(feasible && !nullPath) {
         	//On récupère la destination
             noeudCourant = labels[data.getDestination().getId()].noeud;
             //On récupère son label
@@ -110,21 +113,25 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
             	labelCourant = labels[noeudCourant.getId()];
             	noeuds.add(0, noeudCourant);
             }
-            //System.out.println("Arcs : " + (noeuds.size()-1));
-            //System.out.println("Noeuds : " + graph.size());
-            //System.out.println("Itérations : " + i);
             plusCourtChemin = Path.createShortestPathFromNodes(graph, noeuds);
             solution = new ShortestPathSolution(data, AbstractSolution.Status.valueOf("OPTIMAL"), plusCourtChemin);
         }
         else {
+        	//Chemin null
         	if (nullPath) {
         		solution = new ShortestPathSolution(data, AbstractSolution.Status.valueOf("OPTIMAL"), null);
         	}
+        	//Pas de solution
         	else {
             	solution = new ShortestPathSolution(data, AbstractSolution.Status.valueOf("INFEASIBLE"));
             }
         }
-        
+        //BILAN DE L'EXECUTION
+        /*
+        System.out.println("Arcs : " + (noeuds.size()-1));
+        System.out.println("Noeuds : " + graph.size());
+        System.out.println("Itérations : " + i);
+        */
         return solution;
     }
 

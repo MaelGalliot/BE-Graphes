@@ -1,5 +1,6 @@
 package org.insa.algo.shortestpath;
 
+import java.time.Duration;
 import java.util.ArrayList;
 
 
@@ -18,10 +19,13 @@ public class AStarAlgorithm extends DijkstraAlgorithm {
 
     @Override
     public ShortestPathSolution doRun() {
+    	//Pour connaître le temps d'éxécution
+    	long startTime = System.nanoTime();
+    	long duration;
     	//Pour compter le nombre d'itérations de A*
     	int i = 0;
-    	//Si le chemin demandé existe
-    	boolean pathExists = true;
+    	//S'il existe une solution
+    	boolean feasible = true;
     	//Si l'origine est égale à la destination
     	boolean nullPath = false;
     	//Pour construire la solution, on va créer plusCourtChemin à partir de noeuds, puis solution à partir de
@@ -50,6 +54,8 @@ public class AStarAlgorithm extends DijkstraAlgorithm {
         //Init : on donne un label à tous les noeuds du graphe
         for (Node noeud : graph) {
     		labels[noeud.getId()] = new LabelStar(noeud);
+    		/*labels[noeud.getId()].setCoutDest(labels[noeud.getId()].getNoeud().getPoint().distanceTo(
+                		        				data.getDestination().getPoint()));*/
     	}
         
         //On met le sommet d'origine dans le tas, on met son coût à 0 et on met son coût estimé à la destination
@@ -79,9 +85,9 @@ public class AStarAlgorithm extends DijkstraAlgorithm {
                 		//Si le successeur est autorisé dans le trajet
                 		if (data.isAllowed(successeur)) {
                 			//Si on trouve un cout inférieur au coût actuel du successeur
-                			if(labels[noeudCourant.getId()].getCout()+successeur.getLength() < labels[successeur.getDestination().getId()].getCout()) {
+                			if(labels[noeudCourant.getId()].getCout()+data.getCost(successeur) < labels[successeur.getDestination().getId()].getCout()) {
                 				//On met à jour le coût du successeur à l'origine 
-                				labels[successeur.getDestination().getId()].setCout(labels[noeudCourant.getId()].getCout()+successeur.getLength());
+                				labels[successeur.getDestination().getId()].setCout(labels[noeudCourant.getId()].getCout()+data.getCost(successeur));
                 				//et à la destination
                 				labels[successeur.getDestination().getId()].setCoutDest(
                 						labels[successeur.getDestination().getId()].getNoeud().getPoint().distanceTo(
@@ -94,20 +100,23 @@ public class AStarAlgorithm extends DijkstraAlgorithm {
                 			}
                 		}
                 	}
+                	//On incrémente le nombre d'itérations
                 	i++;
             	}
             	else {
-            		pathExists = false;
+            		//Le tas est vide alors que la destination n'a pas été atteinte => Il n'existe pas de solution
+            		feasible = false;
             		break;
             	}
             }
         }
         else {
+        	//L'origine et la destination sont le même noeud => Il existe une solution : le chemin null
         	nullPath = true;
         }
        
         //S'il existe une solution
-        if(pathExists && !nullPath) {
+        if(feasible && !nullPath) {
         	//On récupère la destination
             noeudCourant = labels[data.getDestination().getId()].noeud;
             //On récupère son label
@@ -120,21 +129,28 @@ public class AStarAlgorithm extends DijkstraAlgorithm {
             	labelCourant = labels[noeudCourant.getId()];
             	noeuds.add(0, noeudCourant);
             }
-            //System.out.println("Arcs : " + (noeuds.size()-1));
-            //System.out.println("Noeuds : " + graph.size());
-            //System.out.println("Itérations : " + i);
             plusCourtChemin = Path.createShortestPathFromNodes(graph, noeuds);
             solution = new ShortestPathSolution(data, AbstractSolution.Status.valueOf("OPTIMAL"), plusCourtChemin);
         }
         else {
+        	//Chemin null
         	if (nullPath) {
         		solution = new ShortestPathSolution(data, AbstractSolution.Status.valueOf("OPTIMAL"), null);
         	}
+        	//Pas de solution
         	else {
             	solution = new ShortestPathSolution(data, AbstractSolution.Status.valueOf("INFEASIBLE"));
             }
         }
         
+        duration = startTime - System.nanoTime();
+        //solution.setSolvingTime(Duration.ofNanos(arg0));
+        //BILAN DE L'EXECUTION
+        /*
+        System.out.println("Arcs : " + (noeuds.size()-1));
+        System.out.println("Noeuds : " + graph.size());
+        System.out.println("Itérations : " + i);
+        */
         return solution;
     }
 }

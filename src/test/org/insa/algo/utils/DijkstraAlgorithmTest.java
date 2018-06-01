@@ -39,10 +39,11 @@ public class DijkstraAlgorithmTest {
     private static Path[][] pathsD = new Path[6][6];
     private static Path[][] pathsB = new Path[6][6];
     //Pour créer les algos à chaque tour de boucle
-    private static AStarAlgorithm algoD;
+    private static DijkstraAlgorithm algoD;
     private static BellmanFordAlgorithm algoB;
     
-    
+    @BeforeClass
+    //Pour préparer le test de base
     public static void init() {
     	//Pour pouvoir récupérer les différents filtres à appliquer aux chemins
     	java.util.List<ArcInspector> filters = new ArrayList<ArcInspector>();
@@ -75,7 +76,7 @@ public class DijkstraAlgorithmTest {
     	//Construction des résultats 
     	for(ligne = 0 ; ligne < 6 ; ligne++) {
     		for(colonne = 0 ; colonne < 6 ; colonne++) {
-    			algoD = new AStarAlgorithm(new ShortestPathData(graph, nodes[ligne], nodes[colonne], filters.get(0)));
+    			algoD = new DijkstraAlgorithm(new ShortestPathData(graph, nodes[ligne], nodes[colonne], filters.get(0)));
     			algoB = new BellmanFordAlgorithm(new ShortestPathData(graph, nodes[ligne], nodes[colonne], filters.get(0)));
     			System.out.println("["+ ligne + ";" + colonne + "]");
     			pathsD[ligne][colonne] = algoD.doRun().getPath();
@@ -84,13 +85,14 @@ public class DijkstraAlgorithmTest {
     	}
     }
     
-    
-    //Pour vérifier que les solutions de notre algo de Dijkstra correspondent bien à celles de BF
-    public void testDijkstra() {
+    @Test
+    //Test basique qui vérifie que Bellman et Dijkstra donnent bien les mêmes résultats pour 
+    //notre graphe de test défini par init
+    public void basicTest() {
     	int ligne, colonne;
     	for(ligne = 0 ; ligne < 6 ; ligne++) {
     		for(colonne = 0 ; colonne < 6 ; colonne++) {
-    			//Pour visualiser la case qui pose problème
+    			//Pour visualiser l'éventuelle case qui pose problème
     			System.out.println("["+ ligne + ";" + colonne + "]");
     			if(pathsB[ligne][colonne] != null) {
     				for (int i = 0 ; i < pathsB[ligne][colonne].size()-1 ; i++) {
@@ -105,7 +107,9 @@ public class DijkstraAlgorithmTest {
     }
     
     @Test
-    public void testScenario() throws Exception{
+    //Test avancé, on génère 10 couples de points aléatoires et on compare les résultats de Dijkstra et de BF
+    //pour chaque couple (on compare juste les longueurs des paths retournés
+    public void randomTest() throws Exception{
     	java.util.List<ArcInspector> filters = new ArrayList<ArcInspector>();
     	filters = ArcInspectorFactory.getAllFilters();
     	String mapName = "maps/haute-garonne/haute-garonne.mapgr";
@@ -114,15 +118,29 @@ public class DijkstraAlgorithmTest {
     	Path pathD, pathB;
     	GraphReader reader = new BinaryGraphReader(new DataInputStream(new BufferedInputStream(new FileInputStream(mapName))));
     	Graph graph2 = reader.read();
-    	for (int i = 0 ; i < 50 ; i++) {
+    	for (int i = 0 ; i < 10 ; i++) {
+    		//On génère un couple aléatoire
     		Node origine = graph2.get((int)(graph2.size()*Math.random()));
     		Node destination = graph2.get((int)(graph2.size()*Math.random()));
-    		System.out.println("["+ origine.getId() + ";" + destination.getId() + "]");
-    		algoD = new DijkstraAlgorithm(new ShortestPathData(graph2, origine, destination, filters.get(0)));
-        	algoB = new BellmanFordAlgorithm(new ShortestPathData(graph2, origine, destination, filters.get(0)));
-        	pathD = algoD.doRun().getPath();
-        	pathB = algoB.doRun().getPath();
-    		assertEquals(pathB.getLength(),pathD.getLength(), 0);
+    		for (int j = 0 ; j < 3 ; j++) {
+        		//Permet de visualiser l'avancement des tests
+    			switch(j) {
+    			case 0 : System.out.println("Défaut (longueur) ["+ origine.getId() + ";" + destination.getId() + "]"); break;
+    			case 1 : System.out.println("Voitures (distance) ["+ origine.getId() + ";" + destination.getId() + "]"); break;
+    			case 2 : System.out.println("Voitures (temps) ["+ origine.getId() + ";" + destination.getId() + "]"); break;
+    			}
+        		
+        		algoD = new DijkstraAlgorithm(new ShortestPathData(graph2, origine, destination, filters.get(j)));
+            	algoB = new BellmanFordAlgorithm(new ShortestPathData(graph2, origine, destination, filters.get(j)));
+            	pathD = algoD.doRun().getPath();
+            	pathB = algoB.doRun().getPath();
+            	//Test en distance
+            	if (pathB != null)
+            		assertEquals(pathB.getLength(),pathD.getLength(), 0);
+            	else
+            		assertEquals(pathB, pathD);
+        		System.out.println("	---> OK !");
+    		}
         } 	
     }
 
