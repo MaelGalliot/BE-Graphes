@@ -68,19 +68,18 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
                 	//Pour visualiser le déroulement de l'algo sur la carte
                 	notifyNodeReached(noeudCourant);
                 	
-                	//On parcourt tous les successeurs
+                	//On parcourt tous les successeurs pour actualiser les coûts
                 	for (Arc successeur : noeudCourant) {
-                		//Si le successeur est autorisé dans le trajet
-                		if (data.isAllowed(successeur)) {
+                		//Si le successeur est autorisé dans le trajet et si sa destination n'est pas déjà marquée
+                		if (data.isAllowed(successeur) && !labels[successeur.getDestination().getId()].estMarque()) {
                 			//Si on trouve un cout inférieur au coût actuel du successeur
                 			if(labels[noeudCourant.getId()].getTotalCost()+data.getCost(successeur) < labels[successeur.getDestination().getId()].getTotalCost()) {
                 				//On met à jour le coût du successeur
                 				labels[successeur.getDestination().getId()].setCout(labels[noeudCourant.getId()].getTotalCost()+data.getCost(successeur));
                 				//On met à jour le père du successeur
                 				labels[successeur.getDestination().getId()].setFather(noeudCourant);
-                				//On insère dans le tas le label du successeur s'il n'y est pas déjà
-                				if(!labels[successeur.getDestination().getId()].estMarque())
-                					tas.insert(labels[successeur.getDestination().getId()]);
+                				//On insère dans le tas le label du successeur 
+                				tas.insert(labels[successeur.getDestination().getId()]);
                 			}
                 		}
                 	}
@@ -127,11 +126,11 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
             }
         }
         //BILAN DE L'EXECUTION
-        /*
-        System.out.println("Arcs : " + (noeuds.size()-1));
-        System.out.println("Noeuds : " + graph.size());
-        System.out.println("Itérations : " + i);
-        */
+        
+        //System.out.println("Arcs : " + (noeuds.size()-1));
+        //System.out.println("Noeuds : " + graph.size());
+        //System.out.println("Itérations : " + i);
+        
         return solution;
     }
 
